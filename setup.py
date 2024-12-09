@@ -1,4 +1,5 @@
 import json
+from id import makeID
 
 print("""
 -----------------------------------------------------------
@@ -42,7 +43,8 @@ def mksem():
     
     with open('config.json', 'r') as file:
         data = json.load(file)
-        
+    
+    data["id"] = makeID()
     data["name"] = name
     data["code"] = code
     data["server_name"] = server_name
