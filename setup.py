@@ -26,6 +26,7 @@ def help(stdin: str):
     else:
         print("""
         help [--global or -g] - see available global commands
+        help [--code or -c] - see available code commands
         mksem - makes a new semester configuration
         viewsem - view the current semester configuration
         reset - reset the current semester configuration
@@ -154,8 +155,27 @@ def remove(stdin: str):
         
     return statement
 
-def edit():
-    pass
+def edit(stdin: str):
+    id = stdin.split(" ")[1]
+    
+    with open('config.json', 'r') as file:
+        data = json.load(file)
+        
+    statement = "Course not edited."
+    
+    for server in data["server"]:
+        if server["id"] == id:
+            statement = f"Course {server['name']} edited."
+            server["name"] = input("Class Name: ")
+            server["code"] = input("Class Code: ")
+            server["server_name"] = input("Server Username: ")
+            server["server_host"] = input("Server Host: ")
+            server["server_pass"] = input("Server Password: ")
+            
+    with open('config.json', 'w') as file:
+        json.dump(data, file, indent=4)
+        
+    return statement
 
 def activate(stdin: str):
     id = stdin.split(" ")[1]
@@ -221,8 +241,8 @@ def main():
             statement = remove(command)
             time.sleep(.25)
             print(statement)
-        elif command == "edit":
-            edit()
+        elif command.split(" ")[0] == "edit":
+            edit(command)
         elif command.split(" ")[0] == "activate":
             print("activating...")
             statement = activate(stdin=command)
