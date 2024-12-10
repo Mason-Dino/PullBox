@@ -156,11 +156,41 @@ def remove(stdin):
 def edit():
     pass
 
-def activate():
-    pass
+def activate(stdin):
+    id = stdin.split(" ")[1]
+    
+    with open('config.json', 'r') as file:
+        data = json.load(file)
+        
+    statement = "Course not deactivated."    
+    
+    for server in data["server"]:
+        if server["id"] == id:
+            server["active"] = True
+            statement = f"Course {server['name']} activated."
+            
+    with open('config.json', 'w') as file:
+        json.dump(data, file, indent=4)
+        
+    return statement
 
-def deactivate():
-    pass
+def deactivate(stdin):
+    id = stdin.split(" ")[1]
+    
+    with open('config.json', 'r') as file:
+        data = json.load(file)
+        
+    statement = "Course not deactivated."    
+    
+    for server in data["server"]:
+        if server["id"] == id:
+            server["active"] = False
+            statement = f"Course {server['name']} deactivated."
+            
+    with open('config.json', 'w') as file:
+        json.dump(data, file, indent=4)
+        
+    return statement
 
 def forcedSync():
     pass
@@ -185,6 +215,16 @@ def main():
             print(statement)
         elif command == "edit":
             edit()
+        elif command.split(" ")[0] == "activate":
+            print("activating...")
+            statement = activate(stdin=command)
+            time.sleep(.25)
+            print(statement)
+        elif command.split(" ")[0] == "deactivate":
+            print("deactivating...")
+            statement = deactivate(command)
+            time.sleep(.25)
+            print(statement)
         elif command == "forced sync":
             forcedSync()
         elif command == "exit":
