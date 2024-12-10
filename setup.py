@@ -36,22 +36,37 @@ def help(stdin):
     pass
 
 def mksem():
-    name = input("Class Name:")
-    code = input("Class Code:")
-    server_name = input("Server Username:")
-    server_pass = input("Server Password:")
-    
     with open('config.json', 'r') as file:
         data = json.load(file)
+        
+    data["server"].clear()
     
-    data["id"] = makeID()
-    data["name"] = name
-    data["code"] = code
-    data["server_name"] = server_name
-    data["server_pass"] = server_pass
+    addServer = "yes"
+    i = 0
+    
+    while (addServer.lower() == "yes"):
+        name = input("Class Name: ")
+        code = input("Class Code: ")
+        server_name = input("Server Username: ")
+        server_host = input("Server Host: ")
+        server_pass = input("Server Password: ")
+        
+        data["server"].append({})
+        
+        
+        data["server"][i]["id"] = makeID()
+        data["server"][i]["name"] = name
+        data["server"][i]["code"] = code
+        data["server"][i]["server_name"] = server_name
+        data["server"][i]["server_host"] = server_host
+        data["server"][i]["server_pass"] = server_pass
+        
+        i += 1
+        
+        addServer = input("Add another server? (yes/no): ")
     
     with open('config.json', 'w') as file:
-        json.dumps(data, file, indent=4)
+        json.dump(data, file, indent=4)
         
     print("Semester configuration created")
     
