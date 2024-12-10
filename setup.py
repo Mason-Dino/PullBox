@@ -77,8 +77,17 @@ def viewsem():
         
     print(json.dumps(data, indent=4))
 
-def reset(stdin):
-    pass
+def reset():
+    reset = input("Are you sure you want to reset the current configuration? (yes/no): ")
+    
+    if reset.lower() == "yes":
+        with open('config.json', 'w') as file:
+            json.dump({"name": None, "server": []}, file, indent=4)
+            
+        print("Semester configuration reset")
+        
+    else:
+        print("Semester configuration not reset")
 
 def add():
     pass
