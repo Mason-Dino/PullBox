@@ -31,6 +31,8 @@ def help(stdin):
         add - add a new course
         remove [id] - remove a course
         edit - edit a course
+        activate [id] - activate a course
+        deactivate [id] - deactivate a course
         forced sync - sync the course list with the server
         exit - exit the dashboard
         """)
@@ -45,6 +47,13 @@ def mksem():
     addServer = "yes"
     i = 0
     
+    print("Semester Time:")
+    print("\tfa: fall")
+    print("\tsp: spring")
+    print("\tsu: summer")
+    print("\tLast 2 numbers of the year 2024: 24")
+    semTime = input("Seamster Time (fa/sp/su)(last 2 of year): ")
+    
     while (addServer.lower() == "yes"):
         name = input("Class Name: ")
         code = input("Class Code: ")
@@ -56,11 +65,13 @@ def mksem():
         
         
         data["server"][i]["id"] = makeID(length=5)
+        data["server"][i]["semTime"] = semTime
         data["server"][i]["name"] = name
         data["server"][i]["code"] = code
         data["server"][i]["server_name"] = server_name
         data["server"][i]["server_host"] = server_host
         data["server"][i]["server_pass"] = server_pass
+        data["server"][i]["active"] = True
         
         i += 1
         
@@ -90,7 +101,39 @@ def reset():
         print("Semester configuration not reset")
 
 def add():
-    pass
+    with open('config.json', 'r') as file:
+        data = json.load(file)
+        
+    print("Semester Time:")
+    print("\tfa: fall")
+    print("\tsp: spring")
+    print("\tsu: summer")
+    print("\tLast 2 numbers of the year 2024: 24")
+    semTime = input("Seamster Time (fa/sp/su)(last 2 of year): ")
+    
+    name = input("Class Name: ")
+    code = input("Class Code: ")
+    server_name = input("Server Username: ")
+    server_host = input("Server Host: ")
+    server_pass = input("Server Password: ")
+    
+    data["server"].append({})
+    i = len(data["server"])-1
+    
+    
+    data["server"][i]["id"] = makeID(length=5)
+    data["server"][i]["semTime"] = semTime
+    data["server"][i]["name"] = name
+    data["server"][i]["code"] = code
+    data["server"][i]["server_name"] = server_name
+    data["server"][i]["server_host"] = server_host
+    data["server"][i]["server_pass"] = server_pass
+    data["server"][i]["active"] = True
+    
+    with open('config.json', 'w') as file:
+        json.dump(data, file, indent=4)
+        
+    print("Course added")
 
 def remove(stdin):
     id = stdin.split(" ")[1]
@@ -99,7 +142,6 @@ def remove(stdin):
         data = json.load(file)
         
     statement = "Course not removed."
-    print(id)
         
     for server in data["server"]:
         if server["id"] == id:
@@ -112,6 +154,12 @@ def remove(stdin):
     return statement
 
 def edit():
+    pass
+
+def activate():
+    pass
+
+def deactivate():
     pass
 
 def forcedSync():
