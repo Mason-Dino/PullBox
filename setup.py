@@ -1,5 +1,6 @@
 import json
 from id import makeID
+from main import sync
 import time
 
 print("""
@@ -17,7 +18,7 @@ Do 'help' to see available commands
 """)
 
 
-def help(stdin):
+def help(stdin: str):
     if "--global" in stdin or "-g" in stdin:
         print("""
         config - config the dashboard
@@ -135,7 +136,7 @@ def add():
         
     print("Course added")
 
-def remove(stdin):
+def remove(stdin: str):
     id = stdin.split(" ")[1]
     
     with open('config.json', 'r') as file:
@@ -156,7 +157,7 @@ def remove(stdin):
 def edit():
     pass
 
-def activate(stdin):
+def activate(stdin: str):
     id = stdin.split(" ")[1]
     
     with open('config.json', 'r') as file:
@@ -174,7 +175,7 @@ def activate(stdin):
         
     return statement
 
-def deactivate(stdin):
+def deactivate(stdin: str):
     id = stdin.split(" ")[1]
     
     with open('config.json', 'r') as file:
@@ -193,7 +194,14 @@ def deactivate(stdin):
     return statement
 
 def forcedSync():
-    pass
+    with open('config.json', 'r') as file:
+        data = json.load(file)
+        
+    for server in data["server"]:
+        if server["active"] == True:
+            print(f"Syncing {server['name']}...")
+            sync(server["server_host"], server["server_name"], server["server_pass"])
+            print(f"{server['name']} synced")
 
 def main():
     while True:
