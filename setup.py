@@ -1,5 +1,6 @@
 import json
 from id import makeID
+import time
 
 print("""
 -----------------------------------------------------------
@@ -28,7 +29,7 @@ def help(stdin):
         viewsem - view the current semester configuration
         reset - reset the current semester configuration
         add - add a new course
-        remove - remove a course
+        remove [id] - remove a course
         edit - edit a course
         forced sync - sync the course list with the server
         exit - exit the dashboard
@@ -54,7 +55,7 @@ def mksem():
         data["server"].append({})
         
         
-        data["server"][i]["id"] = makeID()
+        data["server"][i]["id"] = makeID(length=5)
         data["server"][i]["name"] = name
         data["server"][i]["code"] = code
         data["server"][i]["server_name"] = server_name
@@ -76,14 +77,30 @@ def viewsem():
         
     print(json.dumps(data, indent=4))
 
-def reset():
+def reset(stdin):
     pass
 
 def add():
     pass
 
-def remove():
-    pass
+def remove(stdin):
+    id = stdin.split(" ")[1]
+    
+    with open('config.json', 'r') as file:
+        data = json.load(file)
+        
+    statement = "Course not removed."
+    print(id)
+        
+    for server in data["server"]:
+        if server["id"] == id:
+            statement = f"Course {server["name"]} removed."
+            data["server"].remove(server)
+            
+    with open('config.json', 'w') as file:
+        json.dump(data, file, indent=4)
+        
+    return statement
 
 def edit():
     pass
@@ -104,8 +121,11 @@ def main():
             reset()
         elif command == "add":
             add()
-        elif command == "remove":
-            remove()
+        elif command.split(" ")[0] == "remove":
+            print("removing...")
+            statement = remove(command)
+            time.sleep(.25)
+            print(statement)
         elif command == "edit":
             edit()
         elif command == "forced sync":
