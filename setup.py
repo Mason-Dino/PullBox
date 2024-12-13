@@ -241,7 +241,42 @@ def ls(stdin: str):
             print(f"{server['code']}: {server['name']}")
         
     elif len(args) == 2:
-        os.listdir(args[1])
+        print(os.listdir(f"code/{args[1]}"))
+        
+        directories = []
+        files = []
+        
+        for directory in os.listdir(f"code/{args[1]}"):
+            if os.path.isdir(f"code/{args[1]}/{directory}") == True:
+                directories.append(directory)
+                
+            else:
+                if directory.endswith(".out") != True:
+                    files.append(directory)
+                
+        print(f"Directories: {directories}")
+        print(f"Files: {files}")
+        
+        print(args[1])
+        lenDir = len(directories)
+        
+        for i in range(lenDir):
+            print(f"├── {directories[i]}")
+            
+            for directory in os.listdir(f"code/{args[1]}/{directories[i]}"):
+                if directory in directories:
+                    pass
+                
+                elif os.path.isdir(f"code/{args[1]}/{directories[i]}/{directory}") == True:
+                    print(f"│   ├── {directory}")
+            
+            
+        for i in range(len(files)):
+            if len(files) - 1 == i:
+                print(f"└── {files[i]}")
+                
+            else:
+                print(f"├── {files[i]}")
         
     else:
         print("Invalid arguments")
