@@ -30,7 +30,7 @@ def read_file(ssh_client, filename):
     stdin, stdout, stderr = ssh_client.exec_command(f'cat {filename}')
     return stdout.read().decode()
 
-def sync(hostname, username, password):
+def sync(hostname, username, password, classCode):
     #hostname = os.getenv('HOSTNAME')
     #username = os.getenv('SSH_USERNAME')
     #password = os.getenv('PASSWORD')
@@ -41,16 +41,24 @@ def sync(hostname, username, password):
     stdin, stdout, stderr = ssh_client.exec_command('pwd')
     pwd = stdout.read().decode()
     
-    os.mkdir("code")
+    try:
+        os.mkdir("code")
+    except:
+        pass
+    
+    try:
+        os.mkdir(f"code/{classCode}")
+    except:
+        pass
     
     for directory in get_directories(ssh_client):
-        os.mkdir(f"code/{directory[:-1]}")
+        os.mkdir(f"code/{classCode}/{directory[:-1]}")
         for subdir in get_subdirectories(ssh_client, f"{pwd}/{directory}"): #get_subdirectories(ssh_client, directory):
-            os.mkdir(f"code/{directory[:-1]}/{subdir[:-1]}")
+            os.mkdir(f"code/{classCode}/{directory[:-1]}/{subdir[:-1]}")
             for file in get_files(ssh_client, f"{directory[:-1]}/{subdir}"):
                 print(f"{directory[:-1]}/{subdir[:-1]}/{file}")
                 read = read_file(ssh_client, f"{directory[:-1]}/{subdir[:-1]}/{file}")
-                open(f"code/{directory[:-1]}/{subdir[:-1]}/{file}", 'w').write(read)
+                open(f"code/{classCode}/{directory[:-1]}/{subdir[:-1]}/{file}", 'w').write(read)
                 
         subdirs = get_subdirectories(ssh_client, directory)
         files = get_files(ssh_client, directory)
@@ -61,7 +69,7 @@ def sync(hostname, username, password):
         for file in files:
             print(f"{directory[:-1]}/{file}")
             read = read_file(ssh_client, f"{directory[:-1]}/{file}")
-            open(f"code/{directory[:-1]}/{file}", 'w').write(read)
+            open(f"code/{classCode}/{directory[:-1]}/{file}", 'w').write(read)
             
     files = get_files(ssh_client, f"{pwd}")
     dirs = get_directories(ssh_client)
@@ -71,7 +79,8 @@ def sync(hostname, username, password):
         
     for file in files:
         read = read_file(ssh_client, f"{pwd}/{file}")
-        open(f"code/{file}", 'w').write(read)
+        open(f"code/{classCode}/{file}", 'w').write(read)
+        print(file)
     
     ssh_client.close()
 
