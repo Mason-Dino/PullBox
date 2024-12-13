@@ -2,6 +2,7 @@ import json
 from id import makeID
 from main import sync
 import time
+import os
 
 print("""
 -----------------------------------------------------------
@@ -226,8 +227,25 @@ def forcedSync():
     for server in data["server"]:
         if server["active"] == True:
             print(f"Syncing {server['name']}...")
-            sync(server["server_host"], server["server_name"], server["server_pass"])
+            sync(server["server_host"], server["server_name"], server["server_pass"], server["code"])
             print(f"{server['name']} synced")
+            
+def ls(stdin: str):
+    args = stdin.split(" ")
+    
+    with open('config.json', 'r') as file:
+        data = json.load(file)
+    
+    if len(args) == 1:
+        for server in data["server"]:
+            print(f"{server['code']}: {server['name']}")
+        
+    elif len(args) == 2:
+        os.listdir(args[1])
+        
+    else:
+        print("Invalid arguments")
+    
 
 def main():
     while True:
@@ -261,6 +279,10 @@ def main():
             print(statement)
         elif command == "forced sync":
             forcedSync()
+            
+        elif "ls" in command:
+            ls(stdin=command)
+            
         elif command == "exit":
             break
 
