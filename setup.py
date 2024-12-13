@@ -23,6 +23,12 @@ def help(stdin: str):
         print("""
         config - config the dashboard
         """)
+        
+    elif "--code" in stdin or "-c" in stdin:
+        print("""
+        ls - list all courses
+        ls [Class Code] - list all files in a class
+        """)
     else:
         print("""
         help [--global or -g] - see available global commands
