@@ -267,7 +267,11 @@ def ls(stdin: str):
                     print(f"│   ├── {directory}")
                     
                     for subdirectory in os.listdir(f"code/{args[1]}/{directories[i]}/{directory}"):
-                        print(f"│   │   ├── {subdirectory}")
+                        if subdirectory == os.listdir(f"code/{args[1]}/{directories[i]}/{directory}")[len(os.listdir(f"code/{args[1]}/{directories[i]}/{directory}")) - 1]:
+                            print(f"│   │   └── {subdirectory}")
+                            
+                        else:
+                            print(f"│   │   ├── {subdirectory}")
                         
                 else:
                     if directory.endswith(".out") != True:
