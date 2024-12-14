@@ -3,6 +3,7 @@ from id import makeID
 from main import sync
 import time
 import os
+from directory_tree import DisplayTree
 
 print("""
 -----------------------------------------------------------
@@ -254,21 +255,27 @@ def ls(stdin: str):
                 if directory.endswith(".out") != True:
                     files.append(directory)
                 
-        print(f"Directories: {directories}")
-        print(f"Files: {files}")
         
-        print(args[1])
+        print(f"{args[1]}/")
         lenDir = len(directories)
         
         for i in range(lenDir):
             print(f"├── {directories[i]}")
             
             for directory in os.listdir(f"code/{args[1]}/{directories[i]}"):
-                if directory in directories:
-                    pass
-                
-                elif os.path.isdir(f"code/{args[1]}/{directories[i]}/{directory}") == True:
+                if os.path.isdir(f"code/{args[1]}/{directories[i]}/{directory}") == True:
                     print(f"│   ├── {directory}")
+                    
+                    for subdirectory in os.listdir(f"code/{args[1]}/{directories[i]}/{directory}"):
+                        print(f"│   │   ├── {subdirectory}")
+                        
+                else:
+                    if directory.endswith(".out") != True:
+                        if directory == os.listdir(f"code/{args[1]}/{directories[i]}")[len(os.listdir(f"code/{args[1]}/{directories[i]}")) - 1]:
+                            print(f"│   └── {directory}")
+                            
+                        else:
+                            print(f"│   ├── {directory}")
             
             
         for i in range(len(files)):
