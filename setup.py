@@ -30,6 +30,9 @@ def help(stdin: str):
         print("""
         ls - list all courses
         ls [Class Code] - list all files in a class
+        ls [Class Code]/[Directory] - list all files in a directory
+        cd - change the directory
+        cat - read a file in the current directory
         """)
     else:
         print("""
