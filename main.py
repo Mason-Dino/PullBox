@@ -52,9 +52,15 @@ def sync(hostname, username, password, classCode):
         pass
     
     for directory in get_directories(ssh_client):
-        os.mkdir(f"code/{classCode}/{directory[:-1]}")
+        try:
+            os.mkdir(f"code/{classCode}/{directory[:-1]}")
+        except:
+            pass
         for subdir in get_subdirectories(ssh_client, f"{pwd}/{directory}"): #get_subdirectories(ssh_client, directory):
-            os.mkdir(f"code/{classCode}/{directory[:-1]}/{subdir[:-1]}")
+            try:
+                os.mkdir(f"code/{classCode}/{directory[:-1]}/{subdir[:-1]}")
+            except:
+                pass
             for file in get_files(ssh_client, f"{directory[:-1]}/{subdir}"):
                 print(f"{directory[:-1]}/{subdir[:-1]}/{file}")
                 read = read_file(ssh_client, f"{directory[:-1]}/{subdir[:-1]}/{file}")
@@ -67,9 +73,10 @@ def sync(hostname, username, password, classCode):
             files.remove(subdir[:-1])
             
         for file in files:
-            print(f"{directory[:-1]}/{file}")
-            read = read_file(ssh_client, f"{directory[:-1]}/{file}")
-            open(f"code/{classCode}/{directory[:-1]}/{file}", 'w').write(read)
+            if file.endswith(".out") != True:
+                print(f"{directory[:-1]}/{file}")
+                read = read_file(ssh_client, f"{directory[:-1]}/{file}")
+                open(f"code/{classCode}/{directory[:-1]}/{file}", 'w').write(read)
             
     files = get_files(ssh_client, f"{pwd}")
     dirs = get_directories(ssh_client)
@@ -78,9 +85,10 @@ def sync(hostname, username, password, classCode):
         files.remove(dir[:-1])
         
     for file in files:
-        read = read_file(ssh_client, f"{pwd}/{file}")
-        open(f"code/{classCode}/{file}", 'w').write(read)
-        print(file)
+        if file.endswith(".out") != True:
+            read = read_file(ssh_client, f"{pwd}/{file}")
+            open(f"code/{classCode}/{file}", 'w').write(read)
+            print(file)
     
     ssh_client.close()
 
