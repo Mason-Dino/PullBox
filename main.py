@@ -17,7 +17,7 @@ def get_directories(ssh_client):
     return directories
 
 def get_subdirectories(ssh_client, directory):
-    stdin, stdout, stderr = ssh_client.exec_command(f'cd {directory} ; ls -d */')
+    stdin, stdout, stderr = ssh_client.exec_command(f'cd {directory}/ && ls -d */')
     subdirectories = stdout.read().decode().splitlines()
     return subdirectories
 
@@ -56,7 +56,7 @@ def sync(hostname, username, password, classCode):
             os.mkdir(f"code/{classCode}/{directory[:-1]}")
         except:
             pass
-        for subdir in get_subdirectories(ssh_client, f"{pwd}/{directory}"): #get_subdirectories(ssh_client, directory):
+        for subdir in get_subdirectories(ssh_client, f"{directory}"): #get_subdirectories(ssh_client, directory):
             try:
                 os.mkdir(f"code/{classCode}/{directory[:-1]}/{subdir[:-1]}")
             except:
@@ -86,7 +86,7 @@ def sync(hostname, username, password, classCode):
         
     for file in files:
         if file.endswith(".out") != True:
-            read = read_file(ssh_client, f"{pwd}/{file}")
+            read = read_file(ssh_client, f"{file}")
             open(f"code/{classCode}/{file}", 'w').write(read)
             print(file)
     
