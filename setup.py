@@ -5,6 +5,9 @@ import time
 import os
 from directory_tree import DisplayTree
 
+global current_directory
+current_directory = os.curdir
+
 print("""
 -----------------------------------------------------------
 ██████╗ ██╗   ██╗██╗     ██╗     ██████╗  ██████╗ ██╗  ██╗
@@ -294,9 +297,20 @@ def ls(stdin: str):
         
     else:
         print("Invalid arguments")
+        
+def change_directory(stdin: str):
+    global current_directory
+    
+    stdin = stdin.split(" ")
+    
     
 
+def cat(stdin: str):
+    pass
+
 def main():
+    global current_directory
+    
     while True:
         command = input(">>> ")
         if "help" in command:
@@ -331,6 +345,12 @@ def main():
             
         elif "ls" in command:
             ls(stdin=command)
+            
+        elif "cd" in command:
+            change_directory(stdin=command)
+            
+        elif "cat" in command:
+            cat(stdin=command)
             
         elif command == "exit":
             break
