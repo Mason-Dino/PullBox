@@ -306,7 +306,7 @@ def change_directory(stdin: str):
     
 
 def cat(stdin: str):
-    pass
+    global current_directory
 
 def main():
     global current_directory
