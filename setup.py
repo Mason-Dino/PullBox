@@ -4,6 +4,9 @@ from main import sync
 import time
 import os
 from directory_tree import DisplayTree
+from rich import print
+from rich.console import Console
+from rich.text import Text
 
 global current_directory
 current_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "code")
@@ -13,17 +16,16 @@ print(os.path.join(parent_directory, "code"))
 
 print("""
 -----------------------------------------------------------
+[cyan]
 ██████╗ ██╗   ██╗██╗     ██╗     ██████╗  ██████╗ ██╗  ██╗
 ██╔══██╗██║   ██║██║     ██║     ██╔══██╗██╔═══██╗╚██╗██╔╝
 ██████╔╝██║   ██║██║     ██║     ██████╔╝██║   ██║ ╚███╔╝ 
 ██╔═══╝ ██║   ██║██║     ██║     ██╔══██╗██║   ██║ ██╔██╗ 
 ██║     ╚██████╔╝███████╗███████╗██████╔╝╚██████╔╝██╔╝ ██╗
 ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝
-
-Do 'help' to see available commands
-
------------------------------------------------------------
-""")
+[/cyan]""")
+print(Text("Do 'help' to see available commands"))
+print("-----------------------------------------------------------")
 
 
 def help(stdin: str):
