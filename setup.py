@@ -6,7 +6,10 @@ import os
 from directory_tree import DisplayTree
 
 global current_directory
-current_directory = os.curdir
+current_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "code")
+parent_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "code")
+print(os.path.join(parent_directory, "code"))
+
 
 print("""
 -----------------------------------------------------------
@@ -238,14 +241,20 @@ def forcedSync():
             print(f"{server['name']} synced")
             
 def ls(stdin: str):
+    global current_directory
+    
     args = stdin.split(" ")
     
     with open('config.json', 'r') as file:
         data = json.load(file)
     
     if len(args) == 1:
-        for server in data["server"]:
-            print(f"{server['code']}: {server['name']}")
+        if current_directory == parent_directory:
+            for server in data["server"]:
+                print(f"{server['code']}: {server['name']}")
+                
+        else:
+            print(os.listdir(current_directory))
         
     elif len(args) == 2:
         print(os.listdir(f"code/{args[1]}"))
@@ -303,6 +312,19 @@ def change_directory(stdin: str):
     
     stdin = stdin.split(" ")
     
+    if stdin[1] == "..":
+        current_directory = os.path.dirname(current_directory)
+        print(current_directory)
+        
+    elif stdin[1] == "-l":
+        print(f"{current_directory}")
+    
+    elif os.path.exists(os.path.join(current_directory, stdin[1])) == True:
+        current_directory = os.path.join(current_directory, stdin[1])
+        print(current_directory)
+        
+    else:
+        print("Directory Does Not Exist")
     
 
 def cat(stdin: str):
