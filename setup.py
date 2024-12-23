@@ -312,11 +312,21 @@ def ls(stdin: str):
         
 def change_directory(stdin: str):
     global current_directory
+    global parent_directory
     
     stdin = stdin.split(" ")
     
     if stdin[1] == "..":
         current_directory = os.path.dirname(current_directory)
+        
+        
+        if len(current_directory.split("\\")) < len(parent_directory.split("\\")):
+            current_directory = parent_directory
+        
+        print(current_directory)
+        
+    elif stdin[1] == "/":
+        current_directory = parent_directory
         print(current_directory)
         
     elif stdin[1] == "-l":
