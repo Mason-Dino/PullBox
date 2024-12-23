@@ -257,7 +257,14 @@ def ls(stdin: str):
                 print(Text(f"{server['code']}: {server['name']}"))
                 
         else:
-            print(os.listdir(current_directory))
+            directories = []
+            files = []
+            
+            print(Text(current_directory.split("\\")[-1] + "/"))
+            
+            for directory in os.listdir(current_directory):     
+                if directory.endswith(".out") != True:
+                    print(Text(f"├── {directory}"))
         
     elif len(args) == 2:
         print(os.listdir(f"code/{args[1]}"))
