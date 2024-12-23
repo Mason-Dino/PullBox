@@ -381,12 +381,12 @@ def main():
         elif command.split(" ")[0] == "edit":
             edit(command)
         elif command.split(" ")[0] == "activate":
-            print("activating...")
+            print(Text("activating..."))
             statement = activate(stdin=command)
             time.sleep(.25)
             print(statement)
         elif command.split(" ")[0] == "deactivate":
-            print("deactivating...")
+            print(Text("deactivating..."))
             statement = deactivate(command)
             time.sleep(.25)
             print(statement)
