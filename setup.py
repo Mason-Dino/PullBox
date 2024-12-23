@@ -55,7 +55,7 @@ def help(stdin: str):
         edit - edit a course
         activate [id] - activate a course
         deactivate [id] - deactivate a course
-        forced sync - sync the course list with the server
+        fsync - sync the course list with the server
         exit - exit the dashboard
         """)
     pass
@@ -73,7 +73,7 @@ def mksem():
     print("\tfa: fall")
     print("\tsp: spring")
     print("\tsu: summer")
-    print("\tLast 2 numbers of the year 2024: 24")
+    print(Text("\tLast 2 numbers of the year 2024: 24"))
     semTime = input("Seamster Time (fa/sp/su)(last 2 of year): ")
     
     while (addServer.lower() == "yes"):
@@ -130,7 +130,7 @@ def add():
     print("\tfa: fall")
     print("\tsp: spring")
     print("\tsu: summer")
-    print("\tLast 2 numbers of the year 2024: 24")
+    print(Text("\tLast 2 numbers of the year 2024: 24)"))
     semTime = input("Seamster Time (fa/sp/su)(last 2 of year): ")
     
     name = input("Class Name: ")
@@ -184,7 +184,7 @@ def edit(stdin: str):
     statement = "Course not edited."
     
     for server in data["server"]:
-        if server["id"] == id:
+        if server["code"] == id:
             statement = f"Course {server['name']} edited."
             server["name"] = input("Class Name: ")
             server["code"] = input("Class Code: ")
@@ -195,7 +195,7 @@ def edit(stdin: str):
     with open('config.json', 'w') as file:
         json.dump(data, file, indent=4)
         
-    return statement
+    return Text(statement)
 
 def activate(stdin: str):
     id = stdin.split(" ")[1]
@@ -203,17 +203,17 @@ def activate(stdin: str):
     with open('config.json', 'r') as file:
         data = json.load(file)
         
-    statement = "Course not deactivated."    
+    statement = "Course not activated."    
     
     for server in data["server"]:
-        if server["id"] == id:
+        if server["code"] == id:
             server["active"] = True
             statement = f"Course {server['name']} activated."
             
     with open('config.json', 'w') as file:
         json.dump(data, file, indent=4)
         
-    return statement
+    return Text(statement)
 
 def deactivate(stdin: str):
     id = stdin.split(" ")[1]
@@ -224,14 +224,14 @@ def deactivate(stdin: str):
     statement = "Course not deactivated."    
     
     for server in data["server"]:
-        if server["id"] == id:
+        if server["code"] == id:
             server["active"] = False
             statement = f"Course {server['name']} deactivated."
             
     with open('config.json', 'w') as file:
         json.dump(data, file, indent=4)
         
-    return statement
+    return Text(statement)
 
 def forcedSync():
     with open('config.json', 'r') as file:
@@ -239,9 +239,9 @@ def forcedSync():
         
     for server in data["server"]:
         if server["active"] == True:
-            print(f"Syncing {server['name']}...")
+            print(Text(f"Syncing {server['name']}..."))
             sync(server["server_host"], server["server_name"], server["server_pass"], server["code"])
-            print(f"{server['name']} synced")
+            print(Text(f"{server['name']} synced"))
             
 def ls(stdin: str):
     global current_directory
@@ -254,7 +254,7 @@ def ls(stdin: str):
     if len(args) == 1:
         if current_directory == parent_directory:
             for server in data["server"]:
-                print(f"{server['code']}: {server['name']}")
+                print(Text(f"{server['code']}: {server['name']}"))
                 
         else:
             print(os.listdir(current_directory))
@@ -323,18 +323,18 @@ def change_directory(stdin: str):
         if len(current_directory.split("\\")) < len(parent_directory.split("\\")):
             current_directory = parent_directory
         
-        print(current_directory)
+        print(Text(current_directory))
         
     elif stdin[1] == "/":
         current_directory = parent_directory
-        print(current_directory)
+        print(Text(current_directory))
         
     elif stdin[1] == "-l":
-        print(f"{current_directory}")
+        print(Text(current_directory))
     
     elif os.path.exists(os.path.join(current_directory, stdin[1])) == True:
         current_directory = os.path.join(current_directory, stdin[1])
-        print(current_directory)
+        print(Text(current_directory))
         
     else:
         print("Directory Does Not Exist")
@@ -342,14 +342,14 @@ def change_directory(stdin: str):
 
 def pwd():
     global current_directory
-    print(current_directory)
+    print(Text(current_directory))
 
 def cat(stdin: str):
     with open(os.path.join(current_directory, stdin.split(" ")[1]), 'r') as file:
         data = file.read()
         
     
-    print(data)
+    print(Text(data))
 
 def main():
     global current_directory
@@ -383,7 +383,7 @@ def main():
             statement = deactivate(command)
             time.sleep(.25)
             print(statement)
-        elif command == "forced sync":
+        elif command == "fsync":
             forcedSync()
             
         elif "ls" in command:
