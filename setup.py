@@ -345,7 +345,11 @@ def pwd():
     print(current_directory)
 
 def cat(stdin: str):
-    global current_directory
+    with open(os.path.join(current_directory, stdin.split(" ")[1]), 'r') as file:
+        data = file.read()
+        
+    
+    print(data)
 
 def main():
     global current_directory
