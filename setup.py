@@ -25,7 +25,7 @@ print("""
 ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝
 [/cyan]""")
 print(Text("Do 'help' to see available commands"))
-print("-----------------------------------------------------------")
+print("-----------------------------------------------------------\n")
 
 
 def help(stdin: str):
@@ -41,6 +41,7 @@ def help(stdin: str):
         ls [Class Code]/[Directory] - list all files in a directory
         cd - change the directory
         cat [File] - read a file in the current directory
+        pwd - print the current directory
         """)
     else:
         print("""
@@ -329,6 +330,10 @@ def change_directory(stdin: str):
         print("Directory Does Not Exist")
     
 
+def pwd():
+    global current_directory
+    print(current_directory)
+
 def cat(stdin: str):
     global current_directory
 
@@ -375,6 +380,9 @@ def main():
             
         elif "cat" in command:
             cat(stdin=command)
+            
+        elif "pwd" in command:
+            pwd()
             
         elif command == "exit":
             break
