@@ -24,7 +24,7 @@ print("""
 ██║     ╚██████╔╝███████╗███████╗██████╔╝╚██████╔╝██╔╝ ██╗
 ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝
 [/cyan]""")
-print(Text("Do 'help' to see available commands"))
+print(Text("\nDo 'help' to see available commands\n"))
 print("-----------------------------------------------------------\n")
 
 
