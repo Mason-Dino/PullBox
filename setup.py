@@ -3,7 +3,6 @@ from id import makeID
 from main import sync
 import time
 import os
-from directory_tree import DisplayTree
 from rich import print
 from rich.console import Console
 from rich.text import Text
